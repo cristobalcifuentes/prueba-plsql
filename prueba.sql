@@ -1,0 +1,486 @@
+CREATE TABLE alternativa (
+    id            INTEGER NOT NULL,
+    descripcion   VARCHAR2(200),
+    porcentaje    INTEGER,
+    tipo          CHAR(1),
+    preguntas_id  INTEGER NOT NULL
+);
+ALTER TABLE alternativa ADD CONSTRAINT alternativas_pk PRIMARY KEY ( id );
+CREATE TABLE alumno (
+    id      INTEGER NOT NULL,
+    nombre  VARCHAR2(200)
+);
+ALTER TABLE alumno ADD CONSTRAINT alumno_pk PRIMARY KEY ( id );
+CREATE TABLE autor (
+    id      INTEGER NOT NULL,
+    nombre  VARCHAR2(100)
+);
+ALTER TABLE autor ADD CONSTRAINT autor_pk PRIMARY KEY ( id );
+CREATE TABLE pregunta (
+    id         INTEGER NOT NULL,
+    enunciado  VARCHAR2(200),
+    puntaje    INTEGER,
+    test_id    INTEGER NOT NULL
+);
+ALTER TABLE pregunta ADD CONSTRAINT preguntas_pk PRIMARY KEY ( id );
+CREATE TABLE programa (
+    id      INTEGER NOT NULL,
+    nombre  VARCHAR2(100)
+);
+ALTER TABLE programa ADD CONSTRAINT programa_pk PRIMARY KEY ( id );
+CREATE TABLE respuesta (
+    id               INTEGER NOT NULL,
+    alumno_id        INTEGER NOT NULL,
+    alternativas_id  INTEGER NOT NULL,
+    test_id          INTEGER NOT NULL
+);
+ALTER TABLE respuesta ADD CONSTRAINT respuesta_pk PRIMARY KEY ( id );
+CREATE TABLE test (
+    id           INTEGER NOT NULL,
+    nombre       VARCHAR2(50),
+    descripcion  VARCHAR2(200),
+    fecha        DATE,
+    autor_id     INTEGER NOT NULL,
+    unidad_id    INTEGER NOT NULL,
+    programa_id  INTEGER NOT NULL
+);
+ALTER TABLE test ADD CONSTRAINT test_pk PRIMARY KEY ( id );
+CREATE TABLE unidad (
+    id      INTEGER NOT NULL,
+    nombre  VARCHAR2(50)
+);
+ALTER TABLE unidad ADD CONSTRAINT unidad_pk PRIMARY KEY ( id );
+ALTER TABLE alternativa
+    ADD CONSTRAINT alternativas_preguntas_fk FOREIGN KEY ( preguntas_id )
+        REFERENCES pregunta ( id );
+ALTER TABLE pregunta
+    ADD CONSTRAINT preguntas_test_fk FOREIGN KEY ( test_id )
+        REFERENCES test ( id );
+ALTER TABLE respuesta
+    ADD CONSTRAINT respuesta_alternativas_fk FOREIGN KEY ( alternativas_id )
+        REFERENCES alternativa ( id );
+ALTER TABLE respuesta
+    ADD CONSTRAINT respuesta_alumno_fk FOREIGN KEY ( alumno_id )
+        REFERENCES alumno ( id );
+ALTER TABLE respuesta
+    ADD CONSTRAINT respuesta_test_fk FOREIGN KEY ( test_id )
+        REFERENCES test ( id );
+ALTER TABLE test
+    ADD CONSTRAINT test_autor_fk FOREIGN KEY ( autor_id )
+        REFERENCES autor ( id );
+ALTER TABLE test
+    ADD CONSTRAINT test_programa_fk FOREIGN KEY ( programa_id )
+        REFERENCES programa ( id );
+ALTER TABLE test
+    ADD CONSTRAINT test_unidad_fk FOREIGN KEY ( unidad_id )
+        REFERENCES unidad ( id );
+  ALTER TABLE alumno ADD programa_id  INTEGER NOT NULL
+  ALTER TABLE alumno
+    ADD CONSTRAINT alumno_programa_fk FOREIGN KEY ( programa_id )
+        REFERENCES programa ( id );
+        
+alter table alumno
+  add constraint programa_id fore;        
+        
+--ALTERNATIVA ALUMNO AUTOR PREGUNTA PROGRAMA RESPUESTA TEST UNIDAD
+CREATE SEQUENCE ALTERNATIVAS start with 1 increment by 1;
+CREATE SEQUENCE ALUMNOS start with 1 increment by 1;
+CREATE SEQUENCE AUTORES start with 1 increment by 1;
+CREATE SEQUENCE PREGUNTAS start with 1 increment by 1;
+CREATE SEQUENCE PROGRAMAS start with 1 increment by 1;
+CREATE SEQUENCE RESPUESTAS start with 1 increment by 1;
+CREATE SEQUENCE TESTS start with 1 increment by 1;
+CREATE SEQUENCE UNIDADES start with 1 increment by 1;
+CREATE TRIGGER ALTERNATIVA_ID
+BEFORE INSERT ON ALTERNATIVA
+FOR EACH ROW
+BEGIN
+  SELECT ALTERNATIVAS.nextval
+  INTO :new.ID
+  FROM dual;
+END;
+CREATE TRIGGER ALUMNNO_ID
+BEFORE INSERT ON ALUMNO
+FOR EACH ROW
+BEGIN
+  SELECT ALUMNOS.nextval
+  INTO :new.ID
+  FROM dual;
+END;
+CREATE TRIGGER AUTOR_ID
+BEFORE INSERT ON AUTOR
+FOR EACH ROW
+BEGIN
+  SELECT AUTORES.nextval
+  INTO :new.ID
+  FROM dual;
+END;
+CREATE TRIGGER PREGUNTA_ID
+BEFORE INSERT ON PREGUNTA
+FOR EACH ROW
+BEGIN
+  SELECT PREGUNTAS.nextval
+  INTO :new.ID
+  FROM dual;
+END;
+CREATE TRIGGER PROGRAMA_ID
+BEFORE INSERT ON PROGRAMA
+FOR EACH ROW
+BEGIN
+  SELECT PROGRAMAS.nextval
+  INTO :new.ID
+  FROM dual;
+END;
+CREATE TRIGGER RESPUESTA_ID
+BEFORE INSERT ON RESPUESTA
+FOR EACH ROW
+BEGIN
+  SELECT RESPUESTAS.nextval
+  INTO :new.ID
+  FROM dual;
+END;
+CREATE TRIGGER TEST_ID
+BEFORE INSERT ON TEST
+FOR EACH ROW
+BEGIN
+  SELECT TESTS.nextval
+  INTO :new.ID
+  FROM dual;
+END;
+CREATE TRIGGER UNIDAD_ID
+BEFORE INSERT ON UNIDAD
+FOR EACH ROW
+BEGIN
+  SELECT UNIDADES.nextval
+  INTO :new.ID
+  FROM dual;
+END;
+
+
+
+
+INSERT INTO AUTOR (NOMBRE) VALUES ('OSCAR GONZALES');
+INSERT INTO AUTOR (NOMBRE) VALUES ('JIMMY MUÑOZ');
+INSERT INTO AUTOR (NOMBRE) VALUES ('VICTOR SOTO');
+INSERT INTO UNIDAD (NOMBRE) VALUES ('Programación Básica en Java');
+INSERT INTO UNIDAD (NOMBRE) VALUES ('Base de Datos');
+INSERT INTO UNIDAD (NOMBRE) VALUES ('Desarrollo Web');
+INSERT INTO UNIDAD (NOMBRE) VALUES ('aplicaciones web');
+INSERT INTO UNIDAD (NOMBRE) VALUES ('aplicaciones JEE');
+INSERT INTO PROGRAMA (NOMBRE) VALUES ('FULL STACK JAVA');
+INSERT INTO PROGRAMA (NOMBRE) VALUES ('APLICACIONES ANDROID');
+INSERT INTO PROGRAMA (NOMBRE) VALUES ('Aplicaciones Front-End Trainee');
+INSERT INTO PROGRAMA (NOMBRE) VALUES ('Diseñador UX/UI ');
+
+INSERT INTO ALUMNO (NOMBRE, PROGRAMA_ID) VALUES ('CRISTOBAL CIFUENTES', 1);
+INSERT INTO ALUMNO (NOMBRE, PROGRAMA_ID) VALUES ('VICTOR SOTO', 2);
+INSERT INTO ALUMNO (NOMBRE, PROGRAMA_ID) VALUES ('KATY RAMON', 3);
+INSERT INTO ALUMNO (NOMBRE, PROGRAMA_ID) VALUES ('IGNACIO MILLANAO', 4);
+INSERT INTO ALUMNO (NOMBRE, PROGRAMA_ID) VALUES ('IVAN VILLAROEL', 1);
+INSERT INTO ALUMNO (NOMBRE, PROGRAMA_ID) VALUES ('JAVIERA ESPINOZA', 2);
+INSERT INTO ALUMNO (NOMBRE, PROGRAMA_ID) VALUES ('GERAL REYES', 3);
+INSERT INTO ALUMNO (NOMBRE, PROGRAMA_ID) VALUES ('CRISTIAN PACHECO', 4);
+INSERT INTO ALUMNO (NOMBRE, PROGRAMA_ID) VALUES ('ISMAEL CONTRERAS', 1);
+INSERT INTO ALUMNO (NOMBRE, PROGRAMA_ID) VALUES ('LUIS CONTRERAS', 2);
+INSERT INTO ALUMNO (NOMBRE, PROGRAMA_ID) VALUES ('MARCELOS SALAS', 2);
+INSERT INTO ALUMNO (NOMBRE, PROGRAMA_ID) VALUES ('IVAN ZAMORANO', 3);
+INSERT INTO ALUMNO (NOMBRE, PROGRAMA_ID) VALUES ('ALEXIS SANCHEZ', 4);
+INSERT INTO ALUMNO (NOMBRE, PROGRAMA_ID) VALUES ('ARTURO VIDAL', 1);
+INSERT INTO ALUMNO (NOMBRE, PROGRAMA_ID) VALUES ('GARY MEDEL', 2);
+INSERT INTO ALUMNO (NOMBRE, PROGRAMA_ID) VALUES ('MILOVAN MIROSEVIC', 3);
+INSERT INTO ALUMNO (NOMBRE, PROGRAMA_ID) VALUES ('CRISTIAN ALVAREZ', 4);
+INSERT INTO ALUMNO (NOMBRE, PROGRAMA_ID) VALUES ('LEONEL MESSI', 1);
+INSERT INTO ALUMNO (NOMBRE, PROGRAMA_ID) VALUES ('CRISTIANO RONALDO', 2);
+INSERT INTO ALUMNO (NOMBRE, PROGRAMA_ID) VALUES ('DIEGO MARADONA', 3);
+INSERT INTO ALUMNO (NOMBRE, PROGRAMA_ID) VALUES ('ELIAS FEIGUEROA', 1);
+INSERT INTO ALUMNO (NOMBRE, PROGRAMA_ID) VALUES ('KEVIN DE BRUYNE', 1);
+INSERT INTO ALUMNO (NOMBRE, PROGRAMA_ID) VALUES ('MOHAMED SALAH', 1);
+INSERT INTO ALUMNO (NOMBRE, PROGRAMA_ID) VALUES ('LUCA MODRIC', 1);
+INSERT INTO ALUMNO (NOMBRE, PROGRAMA_ID) VALUES ('SERGIO AGUERO', 2);
+INSERT INTO ALUMNO (NOMBRE, PROGRAMA_ID) VALUES ('SERGIO BUSQUETS', 2);
+INSERT INTO ALUMNO (NOMBRE, PROGRAMA_ID) VALUES ('LUIS SUAREZ', 2);
+INSERT INTO ALUMNO (NOMBRE, PROGRAMA_ID) VALUES ('KARIM BENZEMA', 2);
+INSERT INTO ALUMNO (NOMBRE, PROGRAMA_ID) VALUES ('CLAUDIO BRAVO', 2);
+INSERT INTO ALUMNO (NOMBRE, PROGRAMA_ID) VALUES ('MARIO LEPE', 2);
+INSERT INTO ALUMNO (NOMBRE, PROGRAMA_ID) VALUES ('NICOLAS CASTILLO', 1);
+
+INSERT INTO TEST (NOMBRE, DESCRIPCION, FECHA, AUTOR_ID, UNIDAD_ID, PROGRAMA_ID)
+VALUES ('Consultas a una BD', 'Lenguaje de Consultas a una Base
+de Datos', '29-4-2020', 1, 2, 1);
+INSERT INTO TEST (NOMBRE, DESCRIPCION, FECHA, AUTOR_ID, UNIDAD_ID, PROGRAMA_ID)
+VALUES ('PROYECTO FINAL', 'DESARROLLAR APLICACION QUE COMPITA CON UBER', '15-5-2020', 2, 4, 2);
+INSERT INTO TEST (NOMBRE, DESCRIPCION, FECHA, AUTOR_ID, UNIDAD_ID, PROGRAMA_ID)
+VALUES ('PROYECTO DE MODULO', 'DESARROLLAR APLICACION VISIBLE', '20-6-2020', 3, 4, 3);
+INSERT INTO TEST (NOMBRE, DESCRIPCION, FECHA, AUTOR_ID, UNIDAD_ID, PROGRAMA_ID)
+VALUES ('prueba', 'DESARROLLAR', '20-6-2020', 3, 4, 1);
+INSERT INTO PREGUNTA (ENUNCIADO, PUNTAJE, TEST_ID) VALUES ('PREGUNTA 1', 3, 1);
+INSERT INTO PREGUNTA (ENUNCIADO, PUNTAJE, TEST_ID) VALUES ('PREGUNTA 2', 2, 1);
+INSERT INTO PREGUNTA (ENUNCIADO, PUNTAJE, TEST_ID) VALUES ('PREGUNTA 3', 3, 1);
+INSERT INTO PREGUNTA (ENUNCIADO, PUNTAJE, TEST_ID) VALUES ('PREGUNTA 4', 2, 1);
+INSERT INTO PREGUNTA (ENUNCIADO, PUNTAJE, TEST_ID) VALUES ('PREGUNTA 5', 3, 1);
+INSERT INTO PREGUNTA (ENUNCIADO, PUNTAJE, TEST_ID) VALUES ('PREGUNTA 6', 2, 1);
+INSERT INTO PREGUNTA (ENUNCIADO, PUNTAJE, TEST_ID) VALUES ('PREGUNTA 7', 3, 2);
+INSERT INTO PREGUNTA (ENUNCIADO, PUNTAJE, TEST_ID) VALUES ('PREGUNTA 8', 3, 2);
+INSERT INTO PREGUNTA (ENUNCIADO, PUNTAJE, TEST_ID) VALUES ('PREGUNTA 9', 3, 2);
+INSERT INTO PREGUNTA (ENUNCIADO, PUNTAJE, TEST_ID) VALUES ('PREGUNTA 10', 3, 2);
+INSERT INTO PREGUNTA (ENUNCIADO, PUNTAJE, TEST_ID) VALUES ('PREGUNTA 11', 3, 2);
+INSERT INTO ALTERNATIVA (DESCRIPCION, PORCENTAJE, TIPO, PREGUNTAS_ID) VALUES ('RESPUESTA A', 50, 1, 1);
+INSERT INTO ALTERNATIVA (DESCRIPCION, PORCENTAJE, TIPO, PREGUNTAS_ID) VALUES ('RESPUESTA B', 0, 0, 1);
+INSERT INTO ALTERNATIVA (DESCRIPCION, PORCENTAJE, TIPO, PREGUNTAS_ID) VALUES ('RESPUESTA C', 0, 0, 1);
+INSERT INTO ALTERNATIVA (DESCRIPCION, PORCENTAJE, TIPO, PREGUNTAS_ID) VALUES ('RESPUESTA D', 50, 1, 1);
+INSERT INTO ALTERNATIVA (DESCRIPCION, PORCENTAJE, TIPO, PREGUNTAS_ID) VALUES ('RESPUESTA A', 0, 0, 2);
+INSERT INTO ALTERNATIVA (DESCRIPCION, PORCENTAJE, TIPO, PREGUNTAS_ID) VALUES ('RESPUESTA B', 0, 0, 2);
+INSERT INTO ALTERNATIVA (DESCRIPCION, PORCENTAJE, TIPO, PREGUNTAS_ID) VALUES ('RESPUESTA C', 0, 0, 2);
+INSERT INTO ALTERNATIVA (DESCRIPCION, PORCENTAJE, TIPO, PREGUNTAS_ID) VALUES ('RESPUESTA D', 100, 1, 2);
+INSERT INTO ALTERNATIVA (DESCRIPCION, PORCENTAJE, TIPO, PREGUNTAS_ID) VALUES ('RESPUESTA A', 0, 0, 3);
+INSERT INTO ALTERNATIVA (DESCRIPCION, PORCENTAJE, TIPO, PREGUNTAS_ID) VALUES ('RESPUESTA B', 33, 1, 3);
+INSERT INTO ALTERNATIVA (DESCRIPCION, PORCENTAJE, TIPO, PREGUNTAS_ID) VALUES ('RESPUESTA C', 33, 1, 3);
+INSERT INTO ALTERNATIVA (DESCRIPCION, PORCENTAJE, TIPO, PREGUNTAS_ID) VALUES ('RESPUESTA D', 34, 1, 3);
+INSERT INTO ALTERNATIVA (DESCRIPCION, PORCENTAJE, TIPO, PREGUNTAS_ID) VALUES ('RESPUESTA A', 50, 1, 4);
+INSERT INTO ALTERNATIVA (DESCRIPCION, PORCENTAJE, TIPO, PREGUNTAS_ID) VALUES ('RESPUESTA B', 0, 0, 4);
+INSERT INTO ALTERNATIVA (DESCRIPCION, PORCENTAJE, TIPO, PREGUNTAS_ID) VALUES ('RESPUESTA C', 0, 0, 4);
+INSERT INTO ALTERNATIVA (DESCRIPCION, PORCENTAJE, TIPO, PREGUNTAS_ID) VALUES ('RESPUESTA D', 50, 1, 4);
+INSERT INTO ALTERNATIVA (DESCRIPCION, PORCENTAJE, TIPO, PREGUNTAS_ID) VALUES ('RESPUESTA A', 0, 0, 5);
+INSERT INTO ALTERNATIVA (DESCRIPCION, PORCENTAJE, TIPO, PREGUNTAS_ID) VALUES ('RESPUESTA B', 50, 1, 5);
+INSERT INTO ALTERNATIVA (DESCRIPCION, PORCENTAJE, TIPO, PREGUNTAS_ID) VALUES ('RESPUESTA C', 0, 0, 5);
+INSERT INTO ALTERNATIVA (DESCRIPCION, PORCENTAJE, TIPO, PREGUNTAS_ID) VALUES ('RESPUESTA D', 50, 1, 5);
+INSERT INTO ALTERNATIVA (DESCRIPCION, PORCENTAJE, TIPO, PREGUNTAS_ID) VALUES ('RESPUESTA A', 50, 1, 6);
+INSERT INTO ALTERNATIVA (DESCRIPCION, PORCENTAJE, TIPO, PREGUNTAS_ID) VALUES ('RESPUESTA B', 0, 0, 6);
+INSERT INTO ALTERNATIVA (DESCRIPCION, PORCENTAJE, TIPO, PREGUNTAS_ID) VALUES ('RESPUESTA C', 50, 1, 6);
+INSERT INTO ALTERNATIVA (DESCRIPCION, PORCENTAJE, TIPO, PREGUNTAS_ID) VALUES ('RESPUESTA D', 0, 0, 6);
+INSERT INTO ALTERNATIVA (DESCRIPCION, PORCENTAJE, TIPO, PREGUNTAS_ID) VALUES ('RESPUESTA A', 100, 1, 7);
+INSERT INTO ALTERNATIVA (DESCRIPCION, PORCENTAJE, TIPO, PREGUNTAS_ID) VALUES ('RESPUESTA B', 0, 0, 7);
+INSERT INTO ALTERNATIVA (DESCRIPCION, PORCENTAJE, TIPO, PREGUNTAS_ID) VALUES ('RESPUESTA C', 0, 0, 7);
+INSERT INTO ALTERNATIVA (DESCRIPCION, PORCENTAJE, TIPO, PREGUNTAS_ID) VALUES ('RESPUESTA D', 0, 0, 7);
+INSERT INTO ALTERNATIVA (DESCRIPCION, PORCENTAJE, TIPO, PREGUNTAS_ID) VALUES ('RESPUESTA A', 0, 0, 8);
+INSERT INTO ALTERNATIVA (DESCRIPCION, PORCENTAJE, TIPO, PREGUNTAS_ID) VALUES ('RESPUESTA B', 0, 0, 8);
+INSERT INTO ALTERNATIVA (DESCRIPCION, PORCENTAJE, TIPO, PREGUNTAS_ID) VALUES ('RESPUESTA C', 0, 0, 8);
+INSERT INTO ALTERNATIVA (DESCRIPCION, PORCENTAJE, TIPO, PREGUNTAS_ID) VALUES ('RESPUESTA D', 0, 0, 8);
+INSERT INTO ALTERNATIVA (DESCRIPCION, PORCENTAJE, TIPO, PREGUNTAS_ID) VALUES ('RESPUESTA A', 25, 1, 9);
+INSERT INTO ALTERNATIVA (DESCRIPCION, PORCENTAJE, TIPO, PREGUNTAS_ID) VALUES ('RESPUESTA B', 25, 1, 9);
+INSERT INTO ALTERNATIVA (DESCRIPCION, PORCENTAJE, TIPO, PREGUNTAS_ID) VALUES ('RESPUESTA C', 25, 1, 9);
+INSERT INTO ALTERNATIVA (DESCRIPCION, PORCENTAJE, TIPO, PREGUNTAS_ID) VALUES ('RESPUESTA D', 25, 1, 9);
+INSERT INTO ALTERNATIVA (DESCRIPCION, PORCENTAJE, TIPO, PREGUNTAS_ID) VALUES ('RESPUESTA A', 100, 1, 10);
+INSERT INTO ALTERNATIVA (DESCRIPCION, PORCENTAJE, TIPO, PREGUNTAS_ID) VALUES ('RESPUESTA B', 0, 0, 10);
+INSERT INTO RESPUESTA (ALUMNO_ID, ALTERNATIVAS_ID, TEST_ID) VALUES (1, 1, 1);
+INSERT INTO RESPUESTA (ALUMNO_ID, ALTERNATIVAS_ID, TEST_ID) VALUES (1, 4, 1);
+INSERT INTO RESPUESTA (ALUMNO_ID, ALTERNATIVAS_ID, TEST_ID) VALUES (1, 8, 1);
+INSERT INTO RESPUESTA (ALUMNO_ID, ALTERNATIVAS_ID, TEST_ID) VALUES (1, 10, 1);
+INSERT INTO RESPUESTA (ALUMNO_ID, ALTERNATIVAS_ID, TEST_ID) VALUES (1, 11, 1);
+INSERT INTO RESPUESTA (ALUMNO_ID, ALTERNATIVAS_ID, TEST_ID) VALUES (1, 12, 1);
+INSERT INTO RESPUESTA (ALUMNO_ID, ALTERNATIVAS_ID, TEST_ID) VALUES (1, 13, 1);
+INSERT INTO RESPUESTA (ALUMNO_ID, ALTERNATIVAS_ID, TEST_ID) VALUES (1, 16, 1);
+INSERT INTO RESPUESTA (ALUMNO_ID, ALTERNATIVAS_ID, TEST_ID) VALUES (1, 18, 1);
+INSERT INTO RESPUESTA (ALUMNO_ID, ALTERNATIVAS_ID, TEST_ID) VALUES (1, 20, 1);
+INSERT INTO RESPUESTA (ALUMNO_ID, ALTERNATIVAS_ID, TEST_ID) VALUES (1, 21, 1);
+INSERT INTO RESPUESTA (ALUMNO_ID, ALTERNATIVAS_ID, TEST_ID) VALUES (1, 23, 1);
+INSERT INTO RESPUESTA (ALUMNO_ID, ALTERNATIVAS_ID, TEST_ID) VALUES (2, 1, 1);
+INSERT INTO RESPUESTA (ALUMNO_ID, ALTERNATIVAS_ID, TEST_ID) VALUES (2, 2, 1);
+INSERT INTO RESPUESTA (ALUMNO_ID, ALTERNATIVAS_ID, TEST_ID) VALUES (2, 5, 1);
+INSERT INTO RESPUESTA (ALUMNO_ID, ALTERNATIVAS_ID, TEST_ID) VALUES (2, 10, 1);
+INSERT INTO RESPUESTA (ALUMNO_ID, ALTERNATIVAS_ID, TEST_ID) VALUES (2, 11, 1);
+INSERT INTO RESPUESTA (ALUMNO_ID, ALTERNATIVAS_ID, TEST_ID) VALUES (2, 12, 1);
+INSERT INTO RESPUESTA (ALUMNO_ID, ALTERNATIVAS_ID, TEST_ID) VALUES (2, 13, 1);
+INSERT INTO RESPUESTA (ALUMNO_ID, ALTERNATIVAS_ID, TEST_ID) VALUES (2, 16, 1);
+INSERT INTO RESPUESTA (ALUMNO_ID, ALTERNATIVAS_ID, TEST_ID) VALUES (2, 17, 1);
+INSERT INTO RESPUESTA (ALUMNO_ID, ALTERNATIVAS_ID, TEST_ID) VALUES (2, 19, 1);
+INSERT INTO RESPUESTA (ALUMNO_ID, ALTERNATIVAS_ID, TEST_ID) VALUES (2, 22, 1);
+INSERT INTO RESPUESTA (ALUMNO_ID, ALTERNATIVAS_ID, TEST_ID) VALUES (2, 24, 1);
+INSERT INTO RESPUESTA (ALUMNO_ID, ALTERNATIVAS_ID, TEST_ID) VALUES (2, 29, 1);
+
+
+
+
+
+--pregunta 1
+select p.nombre, count(t.programa_id) as cantidad_test
+from test t
+right join programa p
+on p.id = t.programa_id
+group by p.nombre
+order by cantidad_test desc;
+
+--pregunta 2
+select p.nombre as programas_sin_test
+from programa p 
+full outer join test t
+on p.id = t.programa_id
+where t.id is null
+
+--pregunta 3 a
+select t.nombre as tests_deficientes
+from test t
+full outer join pregunta p
+on p.test_id = t.id
+where p.test_id is null
+
+--pregunta 3 b 
+select  p.enunciado as preguntas_deficientes
+from pregunta p
+left join alternativa a
+on p.id = a.preguntas_id
+HAVING count(p.enunciado) =2 or count(p.enunciado) <2
+group by p.enunciado
+order by p.enunciado;
+
+--pregunta 3 c REVISAR
+select  p.enunciado 
+from pregunta p
+inner join alternativa a
+on p.id = a.preguntas_id
+HAVING count(select id from alternativa where tipo=0)
+group by p.enunciado
+
+
+--
+select  count(select a.id from alternativa where a.tipo=0), p.enunciado
+from pregunta p
+inner join alternativa a
+on p.id = a.preguntas_id
+group by p.enunciado
+
+select p.nombre, count(t.programa_id) as cantidad_test
+from test t
+right join programa p
+on p.id = t.programa_id
+group by p.nombre
+
+select descripcion from alternativa where tipo=1
+
+
+
+
+--pregunta 4 
+--select count(programa_id), programa_id from test
+--group by programa_id
+
+select p.nombre, count(a.programa_id) as cantidad_alumnos
+from programa p
+right join alumno a
+on p.id = a.programa_id
+group by p.nombre
+order by cantidad_alumnos desc;
+
+--PREGUNTA 5
+--Obtener el puntaje no normalizado de cada evaluación. El puntaje no
+--normalizado ha sido definido (requerimiento) como: P = buenas – malas/4. Si un alumno
+--no contesta en una pregunta exactamente lo mismo que se ha definido como correcto,
+--la pregunta cuenta como mala a menos que el alumno haya omitido.
+
+declare
+cursor cbuenas is
+select r.alternativas_id, a.descripcion 
+from respuesta r 
+join alternativa a on r.alternativas_id= a.id 
+where a.tipo=1 ;
+cursor cmalas is
+select r.alternativas_id, a.descripcion 
+from respuesta r 
+join alternativa a on r.alternativas_id= a.id 
+where a.tipo=0;
+buenas cbuenas%rowtype;
+malas cmalas%rowtype;
+puntaje integer;
+begin
+    for malas in cmalas loop
+    dbms_output.put_line(malas.alternativas_id);
+    end loop;
+    for buenas in cbuenas loop
+    dbms_output.put_line(buenas.alternativas_id);
+    end loop; 
+end;
+
+
+
+
+
+
+select count(alternativas_id), alumno_id from respuesta
+group by alumno_id
+
+select r.alternativas_id, a.descripcion, p.enunciado, a.nombre, t.nombre
+from respuesta r 
+join alternativa a on r.alternativas_id= a.id
+join pregunta p on a.preguntas_id= p.id 
+join alumno a on r.alumno_id = a.id
+join test t on t.id=r.test_id
+where a.tipo=1
+
+select count(select r.alternativas_id from respuesta where a.tipo=1), t.nombre
+from respuesta r 
+join alternativa a on r.alternativas_id= a.id
+join pregunta p on a.preguntas_id= p.id 
+join test t on t.id=r.test_id
+group by t.nombre
+
+
+
+select r.alternativas_id, a.descripcion p.enunciado
+from respuesta r 
+join alternativa a
+on r.alternativas.id= a.id 
+where a.tipo=1
+
+
+select A.ID, R.ALTERNATIVAS_ID
+from RESPUESTA R
+right join ALTERNATIVA a
+on A.id = R.ALTERNATIVAS_id
+WHERE A. TIPO =0
+
+
+group by p.nombre
+order by cantidad_alumnos desc;
+
+
+CREATE VIEW comprobacion3
+ AS (select r.alumno_id, count(r.id) as correctas
+from respuesta r
+left join alternativa a
+on r.alternativas_id = a.id
+ WHERE a.tipo  = '1'
+ group by r.alumno_id );
+ 
+ select * from comprobacion3
+comprobacion 
+
+
+select count(r.id) as correctas
+from respuesta r
+full outer join alternativa a
+on r.alternativas_id = a.id
+ WHERE a.tipo  = '1' and r.alumno_id =2
+ group by a.preguntas_id
+ and
+select count(r.id) as incorrectas
+from respuesta r
+full outer join alternativa a
+on r.alternativas_id = a.id
+ WHERE a.tipo  = '0' and r.alumno_id =2
+ group by a.preguntas_id 
+
+select count(r.id) as incorrectas
+from alternativa a, respuesta r
+where a.id = r.alternativas_id and a.tipo  = '0' and r.alumno_id =2
+ group by a.preguntas_id 
+
+
+begin
+dbms_output.put_line('hola');
+end;
+
+BEGIN
+   DBMS_OUTPUT.PUT_LINE ('Hello World!');
+END;
+
+declare
+cursor calumno is
+    select id, nombre from alumno
+    where programa_id= 1;
+alu calumno%rowtype;
+begin
+    for alu in calumno loop
+    dbms_output.put_line(alu.id || ' ' ||alu.nombre);
+    end loop;
+end;
+
